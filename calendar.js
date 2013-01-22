@@ -12,7 +12,7 @@
  * Read the entire license text here: http://www.gnu.org/licenses/lgpl.html
  */
 
-// $Id: calendar.js,v 1.53 2006/02/11 12:32:59 mishoo Exp $
+// $Id$
 
 /** The Calendar object constructor. */
 Calendar = function (firstDayOfWeek, dateStr, onSelected, onClose) {
@@ -552,12 +552,6 @@ Calendar.dayMouseOver = function(ev) {
 		Calendar.addClass(el, "hilite");
 		if (el.caldate) {
 			Calendar.addClass(el.parentNode, "rowhilite");
-			var cal = el.calendar;
-			if (cal && cal.getDateToolTip) {
-				var d = el.caldate;
-				window.status = d;
-				el.title = cal.getDateToolTip(d, d.getFullYear(), d.getMonth(), d.getDate());
-			}
 		}
 	}
 	return Calendar.stopEvent(ev);
@@ -573,7 +567,7 @@ Calendar.dayMouseOut = function(ev) {
 			removeClass(el.parentNode, "rowhilite");
 		if (el.calendar)
 			el.calendar.tooltips.innerHTML = _TT["SEL_DATE"];
-		// return stopEvent(ev);
+		return stopEvent(ev);
 	}
 };
 
@@ -598,7 +592,7 @@ Calendar.cellClick = function(el, ev) {
 		cal.date.setDateOnly(el.caldate);
 		date = cal.date;
 		var other_month = !(cal.dateClicked = !el.otherMonth);
-		if (!other_month && !cal.currentDateEl && cal.multiple)
+		if (!other_month && !cal.currentDateEl)
 			cal._toggleMultipleDate(new Date(date));
 		else
 			newdate = !el.disabled;
@@ -700,12 +694,15 @@ Calendar.cellClick = function(el, ev) {
 		}
 		if (!date.equalsTo(cal.date)) {
 			cal.setDate(date);
-			newdate = true;
+			if (typeof el.navtype == "undefined") {
+				newdate = true;
+			}
 		} else if (el.navtype == 0)
 			newdate = closing = true;
 	}
+
 	if (newdate) {
-		ev && cal.callHandler();
+		ev && cal.callHandler(el);
 	}
 	if (closing) {
 		Calendar.removeClass(el, "hilite");
@@ -1155,6 +1152,11 @@ Calendar.prototype._init = function (firstDayOfWeek, date) {
 				dates[date.print("%Y%m%d")] = cell;
 			if (this.getDateStatus) {
 				var status = this.getDateStatus(date, year, month, iday);
+				if (this.getDateToolTip) {
+					var toolTip = this.getDateToolTip(date, year, month, iday);
+					if (toolTip)
+						cell.title = toolTip;
+				}
 				if (status === true) {
 					cell.className += " disabled";
 					cell.disabled = true;
@@ -1185,7 +1187,7 @@ Calendar.prototype._init = function (firstDayOfWeek, date) {
 		if (!(hasdays || this.showsOtherMonths))
 			row.className = "emptyrow";
 	}
-	this.title.innerHTML = Calendar._MN[month] + ", " + year;
+	this.title.innerHTML = Calendar._MN[month] + " " + year;
 	this.onSetTime();
 	this.table.style.visibility = "visible";
 	this._initMultipleDates();
@@ -1270,9 +1272,9 @@ Calendar.prototype.setRange = function (a, z) {
 };
 
 /** Calls the first user handler (selectedHandler). */
-Calendar.prototype.callHandler = function () {
+Calendar.prototype.callHandler = function (el) {
 	if (this.onSelected) {
-		this.onSelected(this, this.date.print(this.dateFormat));
+		this.onSelected(this, el, this.date.print(this.dateFormat));
 	}
 };
 
@@ -1592,6 +1594,24 @@ Date.parseDate = function(str, fmt) {
 	var i = 0, j = 0;
 	var hr = 0;
 	var min = 0;
+
+	//is this a valid PIM date time format like '200602171530'?
+	if (a != null && a.length == 1 && a[0].length == 12) {
+		var array = new Array(5);
+		array[0] = a[0].substr(0, 4);
+		array[1] = a[0].substr(4, 2);
+		array[2] = a[0].substr(6, 2);
+		array[3] = a[0].substr(8, 2);
+		array[4] = a[0].substr(10, 2);
+		a = array;
+	} else if (a != null && a.length == 1 && a[0].length == 8) {
+		var array = new Array(3);
+		array[0] = a[0].substr(0, 4);
+		array[1] = a[0].substr(4, 2);
+		array[2] = a[0].substr(6, 2);
+		a = array;
+	}
+
 	for (i = 0; i < a.length; ++i) {
 		if (!a[i])
 			continue;
@@ -1645,6 +1665,18 @@ Date.parseDate = function(str, fmt) {
 	if (isNaN(min)) min = today.getMinutes();
 	if (y != 0 && m != -1 && d != 0)
 		return new Date(y, m, d, hr, min, 0);
+
+	/* Start Fix Bug 6009
+	 * liefert korrektes Datum bei Eingabe von dd.mm und erwartetem format dd.mm.yyyy
+	*/
+
+	if (fmt == "%d.%m.%Y" && m != -1 && d != 0){
+		y = today.getFullYear()
+		return new Date(y, m, d, hr, min, 0);
+	}
+
+	/* end Fix */
+
 	y = 0; m = -1; d = 0;
 	for (i = 0; i < a.length; ++i) {
 		if (a[i].search(/[a-zA-Z]+/) != -1) {
@@ -1671,7 +1703,7 @@ Date.parseDate = function(str, fmt) {
 		y = today.getFullYear();
 	if (m != -1 && d != 0)
 		return new Date(y, m, d, hr, min, 0);
-	return today;
+	return null;
 };
 
 /** Returns the number of days in the current month */

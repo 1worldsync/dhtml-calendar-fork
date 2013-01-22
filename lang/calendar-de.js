@@ -64,7 +64,7 @@ Calendar._SMN = new Array
  "Feb",
  "M\u00e4r",
  "Apr",
- "May",
+ "Mai",
  "Jun",
  "Jul",
  "Aug",
@@ -75,7 +75,7 @@ Calendar._SMN = new Array
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["INFO"] = "\u00DCber dieses Kalendarmodul";
+Calendar._TT["INFO"] = "\u00DCber diesen Kalendar";
 
 Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
@@ -94,11 +94,11 @@ Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "- oder klicken und festhalten f\u00fcr Schnellauswahl.";
 
 Calendar._TT["TOGGLE"] = "Ersten Tag der Woche w\u00e4hlen";
-Calendar._TT["PREV_YEAR"] = "Voriges Jahr (Festhalten f\u00fcr Schnellauswahl)";
-Calendar._TT["PREV_MONTH"] = "Voriger Monat (Festhalten f\u00fcr Schnellauswahl)";
+Calendar._TT["PREV_YEAR"] = "Voriges Jahr (halten=>Auswahl)";
+Calendar._TT["PREV_MONTH"] = "Voriger Monat (halten=>Auswahl)";
 Calendar._TT["GO_TODAY"] = "Heute ausw\u00e4hlen";
-Calendar._TT["NEXT_MONTH"] = "N\u00e4chst. Monat (Festhalten f\u00fcr Schnellauswahl)";
-Calendar._TT["NEXT_YEAR"] = "N\u00e4chst. Jahr (Festhalten f\u00fcr Schnellauswahl)";
+Calendar._TT["NEXT_MONTH"] = "N\u00e4chst. Monat (halten=>Auswahl)";
+Calendar._TT["NEXT_YEAR"] = "N\u00e4chst. Jahr (halten=>Auswahl)";
 Calendar._TT["SEL_DATE"] = "Datum ausw\u00e4hlen";
 Calendar._TT["DRAG_TO_MOVE"] = "Zum Bewegen festhalten";
 Calendar._TT["PART_TODAY"] = " (Heute)";
@@ -110,7 +110,7 @@ Calendar._TT["DAY_FIRST"] = "Woche beginnt mit %s ";
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
 // means Monday, etc.
-Calendar._TT["WEEKEND"] = "0,6";
+Calendar._TT["WEEKEND"] = "0";
 
 Calendar._TT["CLOSE"] = "Schlie\u00dfen";
 Calendar._TT["TODAY"] = "Heute";
@@ -118,7 +118,7 @@ Calendar._TT["TIME_PART"] = "(Shift-)Klick oder Festhalten und Ziehen um den Wer
 
 // date formats
 Calendar._TT["DEF_DATE_FORMAT"] = "%d.%m.%Y";
-Calendar._TT["TT_DATE_FORMAT"] = "%a, %b %e";
+Calendar._TT["TT_DATE_FORMAT"] = "%A, %e %b %Y";
 
-Calendar._TT["WK"] = "wk";
+Calendar._TT["WK"] = "KW";
 Calendar._TT["TIME"] = "Zeit:";

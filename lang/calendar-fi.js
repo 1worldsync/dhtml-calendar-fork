@@ -77,6 +77,10 @@ Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "- tai pitämällä Shift-näppäintä pohjassa saat aikaa taaksepäin\n" +
 "- tai klikkaa ja pidä hiiren painike pohjassa sekä liikuta hiirtä muuttaaksesi aikaa nopeasti eteen- ja taaksepäin.";
 
+// the following is to inform that "%s" is to be the first day of week
+// %s will be replaced with the day name.
+Calendar._TT["DAY_FIRST"] = "Woche beginnt mit %s ";
+
 Calendar._TT["PREV_YEAR"] = "Edell. vuosi (paina hetki, näet valikon)";
 Calendar._TT["PREV_MONTH"] = "Edell. kuukausi (paina hetki, näet valikon)";
 Calendar._TT["GO_TODAY"] = "Siirry tähän päivään";
@@ -95,4 +99,8 @@ Calendar._TT["TIME_PART"] = "(Shift-) Klikkaa tai liikuta muuttaaksesi aikaa";
 Calendar._TT["DEF_DATE_FORMAT"] = "%d.%m.%Y";
 Calendar._TT["TT_DATE_FORMAT"] = "%d.%m.%Y";
 
+// This may be locale-dependent.  It specifies the week-end days, as an array
+// of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
+// means Monday, etc.
+Calendar._TT["WEEKEND"] = "0,6";
 Calendar._TT["WK"] = "Vko";
